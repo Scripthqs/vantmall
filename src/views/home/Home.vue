@@ -4,7 +4,7 @@
     <van-nav-bar title="购物街" fixed />
 
     <!-- 提示区 -->
-    <van-notice-bar left-icon="volume-o" text="使用vant-ui组件库重构的版本" />
+    <van-notice-bar left-icon="volume-o" scrollable text="使用vant-ui组件库重构的版本，功能还在开发测试中，尽请期待！" />
 
     <!-- 轮播图 -->
     <van-swipe :autoplay="2000" indicator-color="#f00">
