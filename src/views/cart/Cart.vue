@@ -4,7 +4,7 @@
     <van-nav-bar title="购物车" fixed />
 
     <!-- 商品列表 -->
-    <van-card num="2" price="2.00" desc="描述信息" title="商品标题" thumb="https://img01.yzcdn.cn/vant/ipad.jpeg" />
+    <van-card :num="cartLength" price="2.00" desc="描述信息" title="商品标题" thumb="https://img01.yzcdn.cn/vant/ipad.jpeg" />
 
     <!-- 提交订单 -->
     <van-submit-bar :price="3050" button-text="提交订单">
@@ -17,8 +17,13 @@
 </template>
 
 <script>
-export default {
+import { mapGetters } from 'vuex'
 
+export default {
+  name: 'Cart',
+  computed: {
+    ...mapGetters(['cartLength', 'cartList'])
+  }
 }
 </script>
 

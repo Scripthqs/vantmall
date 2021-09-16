@@ -1,6 +1,6 @@
 
 export class CartGoods {
-  constructor(itemInfo) {
+  constructor (itemInfo) {
     this.desc = itemInfo.desc
     this.title = itemInfo.title
     this.iid = itemInfo.iid

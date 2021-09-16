@@ -7,7 +7,7 @@
     <van-notice-bar left-icon="volume-o" scrollable text="使用vant-ui组件库重构的版本，功能还在开发测试中，尽请期待！" />
 
     <!-- 轮播图 -->
-    <van-swipe :autoplay="2000" indicator-color="#f00">
+    <van-swipe :autoplay="2000" indicator-color="#f00" touchable>
       <van-swipe-item v-for="item in banners" :key="item.title">
         <a :href="item.link">
           <img :src="item.image" alt="轮播图" />
@@ -34,8 +34,11 @@
           <product-grid :productList="goods.sell.list" />
         </van-tab>
       </van-tabs>
-
     </van-list>
+
+    <!-- 点击回到顶部  -->
+    <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
+
   </div>
 </template>
 
@@ -44,28 +47,32 @@
 import RecommendView from './childComps/RecommendView.vue'
 import FeatureView from './childComps/FeatureView.vue'
 import ProductGrid from '@/components/productGrid/ProductGrid.vue'
+import BackTop from '@/components/backTop/BackTop.vue'
 
 import { getHomeMultidata, getHomeGoods } from '@/network/home.js'
+
 export default {
   name: 'Home',
   components: {
     RecommendView,
     FeatureView,
-    ProductGrid
+    ProductGrid,
+    BackTop
   },
   data () {
     return {
       banners: null,
       recommends: null,
       goods: {
-        pop: { page: 4, list: [] },
-        new: { page: 4, list: [] },
-        sell: { page: 4, list: [] }
+        pop: { page: 0, list: [] },
+        new: { page: 0, list: [] },
+        sell: { page: 0, list: [] }
       },
       currentType: 'pop',
       // list: [],
       loading: false,
-      finished: false
+      finished: false,
+      isShowBackTop: false
     }
   },
   created () {
@@ -74,7 +81,16 @@ export default {
     this.getHmGoods('new')
     this.getHmGoods('sell')
   },
+  mounted () {
+    window.addEventListener('scroll', this.scrollToTop)
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.scrollToTop)
+  },
   methods: {
+    /*
+     *1.点击切换tab栏的方法
+     */
     tabClick (index, title) {
       switch (index) {
         case 0:
@@ -89,9 +105,12 @@ export default {
       }
       console.log(index, title)
     },
+
+    /*
+     *2.下拉加载更多数据方法
+     */
     onLoad () {
       // 异步更新数据
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       this.getHmGoods(this.currentType)
 
       // // 加载状态结束
@@ -102,7 +121,33 @@ export default {
         this.finished = true
       }
     },
-
+    /*
+     *3.点击回到顶部的方法
+     */
+    backClick () {
+      // 获取滚动的高度
+      let top = document.documentElement.scrollTop || document.body.scrollTop
+      console.log(top)
+      if (top >= 700) {
+        this.isShowBackTop = true
+      }
+      // 实现滚动效果
+      const timeTop = setInterval(() => {
+        document.body.scrollTop = document.documentElement.scrollTop = top -= 100
+        if (top <= 0) {
+          clearInterval(timeTop)
+        }
+      }, 10)
+    },
+    scrollToTop () {
+      const top = document.documentElement.scrollTop || document.body.scrollTop
+      // console.log(2)
+      if (top >= 700) {
+        this.isShowBackTop = true
+      } else {
+        this.isShowBackTop = false
+      }
+    },
     // 网络请求相关
     async getHmMultidata () {
       // 1.请求多个数据,轮播图相关
@@ -149,8 +194,10 @@ export default {
   background-color: #fff;
   opacity: 1;
 }
-// /deep/.van-tabs__wrap {
-//   position: sticky;
-//   top: 44px;
-// }
+/deep/.van-icon van-icon-back-top {
+  position: fixed;
+  z-index: 1;
+  bottom: 60px;
+  right: 25px;
+}
 </style>
