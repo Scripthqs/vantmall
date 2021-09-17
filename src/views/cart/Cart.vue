@@ -1,14 +1,19 @@
 <template>
   <div class="cart-container">
     <!-- 导航栏 -->
-    <van-nav-bar title="购物车" fixed />
+    <van-nav-bar fixed>
+      <template #title>
+        购物车 ({{ cartLength }})
+      </template>
+    </van-nav-bar>
 
     <!-- 商品列表 -->
-    <van-card :num="cartLength" price="2.00" desc="描述信息" title="商品标题" thumb="https://img01.yzcdn.cn/vant/ipad.jpeg" />
 
+    <cart-list></cart-list>
     <!-- 提交订单 -->
-    <van-submit-bar :price="3050" button-text="提交订单">
-      <van-checkbox>全选</van-checkbox>
+
+    <van-submit-bar :price="cartTotal * 100" :button-text="`结算 (${cartChecked.length})`">
+      <van-checkbox v-model="checked">全选</van-checkbox>
       <template #tip>
         你的收货地址不支持同城送, <span>修改地址</span>
       </template>
@@ -18,18 +23,30 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import CartList from './childComps/CartList.vue'
 
 export default {
   name: 'Cart',
+  data () {
+    return {
+      // checked: true
+    }
+  },
+  components: { CartList },
   computed: {
-    ...mapGetters(['cartLength', 'cartList'])
+    ...mapGetters(['cartLength', 'cartList', 'cartChecked', 'cartTotal'])
+  },
+  methods: {
+    allCheckClick () {
+      this.$store.dispatch('allCheckClick')
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
 .cart-container {
-  padding: 46px 0 50px 0;
+  padding: 46px 0 120px 0;
 }
 .van-nav-bar {
   background-color: #fd6020;

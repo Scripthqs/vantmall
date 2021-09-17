@@ -16,6 +16,12 @@ export default {
       }
     })
   },
+  deleteCart (context, payload) {
+    return new Promise((resolve, reject) => {
+      context.commit('deleteCart', payload)
+      resolve('已移除该商品！')
+    })
+  },
   clickCheck (context, payload) {
     context.commit('changeChecked', payload)
   },
