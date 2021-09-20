@@ -11,6 +11,13 @@ export default {
   cartChecked (state) {
     return state.cartList.filter(item => item.checked)
   },
+  selectAll (state) {
+    if (state.cartList.length !== 0) {
+      return !state.cartList.find((item) => !item.checked)
+    } else {
+      return false
+    }
+  },
   // 已选的购物车商品总额
   cartTotal (state) {
     // console.log(cartChecked)

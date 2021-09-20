@@ -22,6 +22,10 @@ export default {
       default () {
         return {}
       }
+    },
+    itemIndex: {
+      type: Number,
+      default: 0
     }
   },
   methods: {
