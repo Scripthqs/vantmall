@@ -2,13 +2,17 @@
   <div class="cate-container">
     <van-nav-bar title="分类" fixed />
 
-    <!-- 侧边栏 -->
-    <van-sidebar v-model="activeKey" @change="onChange">
-      <van-sidebar-item v-for=" (item,index) in categories" :key="index" :title="item.title" />
-    </van-sidebar>
+    <div class="content">
+      <!-- 侧边栏 -->
+      <van-sidebar v-model="activeKey" @change="onChange" class="menu-left">
+        <van-sidebar-item v-for=" (item,index) in categories" :key="index" :title="item.title" />
+      </van-sidebar>
 
-    <!-- 内容区 -->
-    <tab-content-category :showDetailCategory="showDetailCategory" />
+      <!-- 内容区 -->
+      <van-list class="content-right" v-model="loading" :finished="finished" finished-text="没有更多了">
+        <tab-content-category :showDetailCategory="showDetailCategory" />
+      </van-list>
+    </div>
 
   </div>
 </template>
@@ -32,8 +36,8 @@ export default {
       categories: [],
       categoryData: [],
       menuIndex: 0,
-      rightRefresh: null,
-      isBackTopShow: false
+      loading: false,
+      finished: false
     }
   },
   created () {
@@ -80,7 +84,9 @@ export default {
     },
     onChange (index) {
       Notify({ type: 'primary', message: index })
+      // this.menuIndex = index
     }
+
   },
   computed: {
     showDetailCategory () {
@@ -102,11 +108,30 @@ export default {
 <style lang="less" scoped>
 .cate-container {
   padding: 46px 0 50px 0;
+  // position: relative;
 }
 .van-nav-bar {
   background-color: #fd6020;
 }
 /deep/.van-nav-bar__title {
   color: #fff;
+}
+.content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 44px;
+  bottom: 49px;
+  overflow: hidden;
+  display: flex;
+}
+.menu-left {
+  padding: 5px 0;
+  height: 100%;
+}
+.content-right {
+  height: 100%;
+  margin: 5px;
+  flex: 1;
 }
 </style>
