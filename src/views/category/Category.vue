@@ -1,18 +1,32 @@
 <template>
   <div class="cate-container">
+    <!-- 导航栏 -->
     <van-nav-bar title="分类" fixed />
 
-    <div class="content">
-      <!-- 侧边栏 -->
-      <van-sidebar v-model="activeKey" @change="onChange" class="menu-left">
-        <van-sidebar-item v-for=" (item,index) in categories" :key="index" :title="item.title" />
-      </van-sidebar>
-
-      <!-- 内容区 -->
-      <van-list class="content-right" v-model="loading" :finished="finished" finished-text="没有更多了">
+    <van-row>
+      <van-col span="6">
+        <!-- 侧边栏 -->
+        <van-sidebar v-model="activeKey" @change="onChange">
+          <van-sidebar-item v-for=" (item,index) in categories" :key="index" :title="item.title" />
+        </van-sidebar>
+      </van-col>
+      <van-col span="18">
+        <!-- 内容区 -->
         <tab-content-category :showDetailCategory="showDetailCategory" />
-      </van-list>
-    </div>
+
+        <!-- 标签页 -->
+        <van-tabs @click="tabClick" offset-top="36px" sticky>
+          <van-tab title="流行">
+
+          </van-tab>
+          <van-tab title="新款">
+          </van-tab>
+          <van-tab title="精选">
+          </van-tab>
+        </van-tabs>
+      </van-col>
+
+    </van-row>
 
   </div>
 </template>
@@ -23,8 +37,9 @@ import {
   getSubcategory,
   getCategoryDetail
 } from '@/network/category'
-import { Notify } from 'vant'
+// import { Notify } from 'vant'
 import TabContentCategory from './childComps/TabContentCategory.vue'
+// import ProductGrid from '@/components/productGrid/ProductGrid.vue'
 
 export default {
 
@@ -37,12 +52,14 @@ export default {
       categoryData: [],
       menuIndex: 0,
       loading: false,
-      finished: false
+      finished: false,
+      scroll: []
     }
   },
   created () {
     this._getCategory()
   },
+
   methods: {
     _getCategory () {
       getCategory().then((res) => {
@@ -62,7 +79,6 @@ export default {
           }
           this._getSubcategory(index)
         }
-
         // 请求下来第一页的pop，new，sell
         this._getCategoryDetail(0, 'pop')
         this._getCategoryDetail(0, 'new')
@@ -83,8 +99,11 @@ export default {
       )
     },
     onChange (index) {
-      Notify({ type: 'primary', message: index })
-      // this.menuIndex = index
+      // Notify({ type: 'primary', message: index })
+      this.menuIndex = index
+    },
+    tabClick (index, title) {
+      console.log(index, title)
     }
 
   },
@@ -94,12 +113,6 @@ export default {
         return []
       }
       return this.categoryData[this.menuIndex].subcategories
-    },
-    showDetails () {
-      if (!this.categoryData[this.menuIndex]) {
-        return []
-      }
-      return this.categoryData[this.menuIndex].categoryDetail[this.currentTab]
     }
   }
 }
@@ -108,30 +121,11 @@ export default {
 <style lang="less" scoped>
 .cate-container {
   padding: 46px 0 50px 0;
-  // position: relative;
 }
 .van-nav-bar {
   background-color: #fd6020;
 }
 /deep/.van-nav-bar__title {
   color: #fff;
-}
-.content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 44px;
-  bottom: 49px;
-  overflow: hidden;
-  display: flex;
-}
-.menu-left {
-  padding: 5px 0;
-  height: 100%;
-}
-.content-right {
-  height: 100%;
-  margin: 5px;
-  flex: 1;
 }
 </style>
