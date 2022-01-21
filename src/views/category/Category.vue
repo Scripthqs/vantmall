@@ -17,11 +17,13 @@
         <!-- 标签页 -->
         <van-tabs @click="tabClick" offset-top="36px" sticky>
           <van-tab title="流行">
-
+            <!-- <product-grid /> -->
           </van-tab>
           <van-tab title="新款">
+
           </van-tab>
           <van-tab title="精选">
+
           </van-tab>
         </van-tabs>
       </van-col>

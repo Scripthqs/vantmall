@@ -5,7 +5,12 @@
         <template #icon>
           <van-checkbox v-model="product.checked" />
         </template>
-        <van-card :num="product.count" :price="product.newPrice" :desc="product.desc" :title="product.title" :thumb="product.imgURL" />
+        <van-card :num="product.count" :price="product.newPrice" :desc="product.desc" :title="product.title" :thumb="product.imgURL">
+          <template #footer>
+            <van-button size="small" @click="decreaseCount">-</van-button>
+            <van-button size="small" @click="increaseCount">+</van-button>
+          </template>
+        </van-card>
       </van-cell>
     </template>
     <template #right>
@@ -31,6 +36,14 @@ export default {
   methods: {
     deleteProductClick (iid) {
       this.$emit('deleteProductClick', iid)
+    },
+    decreaseCount () {
+      if (this.product.count > 1) {
+        this.product.count--
+      }
+    },
+    increaseCount () {
+      this.product.count++
     }
   }
 }
