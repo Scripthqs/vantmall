@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-image :src="productItem.show.img" fit="cover" width="100%" />
+    <van-image :src="showImage" fit="cover" width="100%" />
     <div>
       <p class="van-ellipsis1">{{ productItem.title }}</p>
       <span style="color: 'red';font-size: 18px;">￥{{ productItem.price }}</span> 已售{{ productItem.sale }}
@@ -17,7 +17,19 @@ export default {
         return {}
       }
     }
+  },
+  computed: {
+    showImage () {
+      if (this.productItem.show) {
+        return this.productItem.show.img
+      } else if (this.productItem.image) {
+        return this.productItem.image
+      } else {
+        return this.productItem.img
+      }
+    }
   }
+
 }
 </script>
 
